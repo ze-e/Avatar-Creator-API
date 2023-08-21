@@ -31,7 +31,7 @@ function connectToDB() {
   database();
 }
 
-if (isLocal === true) {
+if (isLocal == true) {
   console.log("connecting to local database...");
   mongoose.connect("mongodb://localhost", {
     useNewUrlParser: true,
@@ -43,7 +43,7 @@ else connectToDB();
 /* SERVER */
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // create application/json parser
 var jsonParser = bodyParser.json()
