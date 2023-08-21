@@ -14,7 +14,7 @@ exports.getAllUsers = async (isAdmin) => {
   }
 }
 
-// GET one user object by id
+// GET current user
 exports.getCurrentUser = async (userId) => {
   try {
     if (!userId) throw new Error(`Invalid token or userId`);

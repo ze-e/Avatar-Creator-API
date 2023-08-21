@@ -12,7 +12,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getCurrentUser = async (req, res) => {
   try {
     const user = await userService.getCurrentUser(req.user);
-    res.status(200).json({ data: user, message: "got current user" });
+    res.status(200).json({ user, message: "got current user" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -21,7 +21,7 @@ exports.getCurrentUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id, req.isAdmin);
-    res.status(200).json({ data: user, message: "got user" });
+    res.status(200).json({ user, message: "got user" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
