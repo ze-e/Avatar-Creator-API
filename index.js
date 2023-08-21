@@ -33,7 +33,7 @@ function connectToDB() {
 
 if (isLocal == true) {
   console.log("connecting to local database...");
-  await mongoose.connect("mongodb://localhost", {
+  async () => await mongoose.connect("mongodb://localhost", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
