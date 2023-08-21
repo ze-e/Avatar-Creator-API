@@ -11,7 +11,7 @@ const isLocal = process.env.ISLOCAL || false;
 
 function connectToDB() {
   console.log("connecting to database...");
-  const database = (module.exports = () => {
+  const database = (module.exports = async () => {
     const connectionParams = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -21,7 +21,7 @@ function connectToDB() {
     const uri = process.env.MONGODB_URI;
 
     try {
-      mongoose.connect(uri.replace("<MONGODB_PW>", pw), connectionParams);
+      await mongoose.connect(uri.replace("<MONGODB_PW>", pw), connectionParams);
       console.log("connected to database successfully!");
     } catch (error) {
       console.log(error);
@@ -33,7 +33,7 @@ function connectToDB() {
 
 if (isLocal == true) {
   console.log("connecting to local database...");
-  mongoose.connect("mongodb://localhost", {
+  await mongoose.connect("mongodb://localhost", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
@@ -56,14 +56,3 @@ app.use("/ping", ping)
 module.exports = app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
-
-// if (isLocal === true) {
-// 	//local host
-// 	module.exports = app.listen(port, () => {
-//     console.log(`Local server listening on port ${port}`);
-//   });
-// } else {
-// 		module.exports = app.listen(port, () => {
-//       console.log(`Server listening on port ${port}`);
-//     });
-// }
