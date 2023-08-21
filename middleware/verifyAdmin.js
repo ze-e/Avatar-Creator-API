@@ -1,17 +1,22 @@
 const User = require("../models/User.model");
 
 async function verifyAdmin(req, res, next) {
-  //check if user is admin
-  let user = null;
   try {
-    user = await User.findOne({ _id: req.user });
+    // check if user is admin
+    const user = await User.findOne({ _id: req.user });
+
+    if (!user) {
+      req.isAdmin = false;
+    } else {
+      req.isAdmin = user.admin.userType === "admin";
+    }
+
+    next();
+  } catch (error) {
+    console.log("Error verifying admin token");
+    req.isAdmin = false; // Set isAdmin to false in case of an error
+    next();
   }
-  catch (e) {
-    console.log("error verifying admin token");
-  }
-  if(!user) req.isAdmin = false
-  else req.isAdmin = user.admin.userType === "admin" ? true : false;
-  next();
 }
 
 module.exports = verifyAdmin;
