@@ -127,28 +127,28 @@ const userSchema = new Schema({
 });
 
 // Custom validation for userName and email uniqueness
-userSchema.pre('save', async function(next) {
-  const existingUserByEmail = await mongoose.model('User').findOne({
-    'admin.email': this.admin.email,
-    _id: { $ne: this._id }, // Exclude current user's id during update
-  });
+// userSchema.pre('save', async function(next) {
+//   const existingUserByEmail = await mongoose.model('User').findOne({
+//     'admin.email': this.admin.email,
+//     _id: { $ne: this._id }, // Exclude current user's id during update
+//   });
 
-  const existingUserByUserName = await mongoose.model('User').findOne({
-    'admin.userName': this.admin.userName,
-    _id: { $ne: this._id }, // Exclude current user's id during update
-  });
+//   const existingUserByUserName = await mongoose.model('User').findOne({
+//     'admin.userName': this.admin.userName,
+//     _id: { $ne: this._id }, // Exclude current user's id during update
+//   });
 
-  if (existingUserByEmail) {
-    const err = new Error('email already exists');
-    return next(err);
-  }
+//   if (existingUserByEmail) {
+//     const err = new Error('email already exists');
+//     return next(err);
+//   }
 
-  if (existingUserByUserName) {
-    const err = new Error('userName already exists');
-    return next(err);
-  }
+//   if (existingUserByUserName) {
+//     const err = new Error('userName already exists');
+//     return next(err);
+//   }
 
-  next();
-});
+//   next();
+// });
 
 module.exports = mongoose.model("User", userSchema);
