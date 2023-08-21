@@ -3,7 +3,7 @@ const userService = require("../services/users.service");
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await userService.getAllUsers(req.isAdmin);
-    res.status(200).json({ users, message: "got users" });
+    res.status(200).json({ data: users, message: "got users" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -12,7 +12,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getCurrentUser = async (req, res) => {
   try {
     const user = await userService.getCurrentUser(req.user);
-    res.status(200).json({ user, message: "got current user" });
+    res.status(200).json({ data: user, message: "got current user" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -21,7 +21,7 @@ exports.getCurrentUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id, req.isAdmin);
-    res.status(200).json({ user, message: "got user" });
+    res.status(200).json({ data: user, message: "got user" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -38,11 +38,13 @@ exports.loginUser = async (req, res) => {
       if (!user) res
         .status(500)
         .json({ error: "could not load user" });
-      else res.status(200).json({ user, token, message: "loaded user successfully" });
+      else res
+        .status(200)
+        .json({ data: user, token, message: "loaded user successfully" });
     }
     else res
         .status(200)
-        .json({ data: token, message: "logged in successfully" });
+        .json({  token, message: "logged in successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -51,7 +53,7 @@ exports.loginUser = async (req, res) => {
 exports.createUser = async (req, res) => {
   try {
     const user = await userService.createUser(req.body.userName, req.body.email, req.body.password);
-    res.status(200).json({ message:  `successfully created user ${user.admin.userName}` });
+    res.status(200).json({data: user.data, message:  `successfully created user ${user.admin.userName}` });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -69,7 +71,7 @@ exports.updateUser = async (req, res) => {
       req.body.newVals,
       req.isAdmin
     );
-    res.status(200).json({ user, message: "updated user info" });
+    res.status(200).json({ data: user, message: "updated user info" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
