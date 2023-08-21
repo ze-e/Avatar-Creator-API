@@ -1,6 +1,6 @@
-const userRoutes = require('./routes/users.routes');
+const userRoutes = require("./routes/users.routes");
 const ping = require("./routes/ping.routes");
-const express = require('express');
+const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
