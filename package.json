@@ -1,5 +1,5 @@
 {
-  "name": "CodeQuest Avatar Creator Backend",
+  "name": "codequest_avatar_backend",
   "version": "1.0.0",
   "description": "API for CodeQuest Avatar Creator",
   "main": "index.js",
