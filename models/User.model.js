@@ -117,28 +117,34 @@ const userSchema = new Schema({
     gear: {
       head: {
         type: String,
+        required: true,
         default: ""
       },
       RHand:
       {
         type: String,
+        required: true,
         default: ""
       },
       legs: {
         type: String,
+        required: true,
         default: ""
       },
       body: {
         type: String,
+        required: true,
         default: ""
       },
       LHand:
       {
         type: String,
+        required: true,
         default: ""
       },
       feet: {
         type: String,
+        required: true,
         default: ""
       },
 
