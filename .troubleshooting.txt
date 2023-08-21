@@ -1,0 +1,21 @@
+=============
+Common Errors
+=============
+
+-Problem-
+
+Error: MongooseError: Operation `tours.insertOne()` buffering timed out after 10000ms at Timeout
+
+-or-
+
+unhandledpromiserejectionwarning: unhandled promise rejection. this error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). to terminate the node process on unhandled promise rejection, use the cli flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 67)
+
+-Solution-
+
+If you keep timing out when trying to run mongoose commands (such as find),
+you are not connected to the database before running the command. Check
+your database connection. The unhandledpromiserejection is also coming from
+findOne() not running in verifyAdmin
+
+===
+
