@@ -115,12 +115,33 @@ const userSchema = new Schema({
       default: 1,
     },
     gear: {
-      head: String,
-      RHand: String,
-      legs: String,
-      body: String,
-      LHand: String,
-      feet: String,
+      head: {
+        type: String,
+        default: ""
+      },
+      RHand:
+      {
+        type: String,
+        default: ""
+      },
+      legs: {
+        type: String,
+        default: ""
+      },
+      body: {
+        type: String,
+        default: ""
+      },
+      LHand:
+      {
+        type: String,
+        default: ""
+      },
+      feet: {
+        type: String,
+        default: ""
+      },
+
     },
     inventory: [String],
   },
