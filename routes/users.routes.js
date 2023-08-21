@@ -14,8 +14,7 @@ const {
 
 const router = express.Router();
 
-router.use(verifyToken);
-router.use(verifyAdmin);
+router.use(verifyToken, verifyAdmin);
 router.route("/users").get(getAllUsers);
 router.route("/login").post(loginUser);
 router.route("/register").post(createUser);
