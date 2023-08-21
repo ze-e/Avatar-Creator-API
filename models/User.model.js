@@ -126,7 +126,7 @@ const userSchema = new Schema({
   },
 });
 
-Custom validation for userName and email uniqueness
+// Custom validation for userName and email uniqueness
 userSchema.pre('save', async function(next) {
   const existingUserByEmail = await mongoose.model('User').findOne({
     'admin.email': this.admin.email,
