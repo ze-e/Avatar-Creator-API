@@ -46,9 +46,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // create application/json parser
-var jsonParser = bodyParser.json()
+const jsonParser = bodyParser.json()
 
 app.use(jsonParser);
+const cors = require("cors");
+app.use(cors());
 
 app.use("/", userRoutes);
 app.use("/ping", ping)
