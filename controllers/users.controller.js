@@ -33,18 +33,8 @@ exports.loginUser = async (req, res) => {
       userName: req.body.userName,
       password: req.body.password,
     });
-    if (req.body.loadUser === true) {
-      const user = await userService.getCurrentUser(token.userId);
-      if (!user) res
-        .status(500)
-        .json({ error: "could not load user" });
-      else res
-        .status(200)
-        .json({ data: user, token, message: "loaded user successfully" });
-    }
-    else res
-        .status(200)
-        .json({  token: token, message: "logged in successfully" });
+    if(token) return res.status(200).json({ token: token, message: "logged in successfully" });
+    else return res.status(500).json({ error: "could not log in" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

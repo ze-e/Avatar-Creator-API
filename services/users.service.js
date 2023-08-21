@@ -46,7 +46,7 @@ exports.loginUser = async ({userName, password}) => {
 
     if (await bcrypt.compare(password, user.admin.password)) {
         const token = jwt.sign({ userId: user._id }, process.env.SECRETKEY, { expiresIn: "7d" });
-        return { token, userId: user._id };
+        return token;
     } else throw new Error("Invalid userName or password");
   } catch (e) {
     throw new Error(`Error signing in`);
