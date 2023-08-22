@@ -120,7 +120,7 @@ exports.addToInventory = async (userId, item) => {
     if (!item.id) throw new Error(`Invalid item`);
     const inventory = user.data.inventory;
     const gold = user.data.gold;
-    if (gold - item.cost <= 0) throw new Error(`Not enough gold for item. Need $${ item.cost }`);
+    if (gold - item.cost < 0) throw new Error(`Not enough gold for item. Need $${ item.cost }`);
     user.data.gold = gold - item.cost;
     user.data.inventory = [...inventory, item.id];
 
