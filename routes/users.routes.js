@@ -11,9 +11,9 @@ const {
   updateUser,
   deleteUser,
   addToInventory,
-  deleteFromInventory,
+  removeFromInventory,
   equipItem,
-  unequipItem
+  unequipItem,
 } = require("../controllers/users.controller");
 
 const router = express.Router();
@@ -30,7 +30,10 @@ router
   .patch(updateUser);
 
 // gear and inventory
-router.route("/user/:id/inventory").patch(addToInventory).delete(deleteFromInventory);
+router
+  .route("/user/:id/inventory")
+  .patch(addToInventory)
+  .delete(removeFromInventory);
 router.route("/user/:id/gear/equip").patch(equipItem);
 router.route("/user/:id/gear/unequip").patch(unequipItem);
 
