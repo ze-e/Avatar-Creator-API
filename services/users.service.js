@@ -139,6 +139,7 @@ exports.removeFromInventory = async (userId, item) => {
       throw new Error(`User not found`);
     }
     if (!item.id) throw new Error(`Invalid item`);
+    // TODO: this will not work for duplicate items
     user.data.inventory = user.data.inventory.filter(i => i !== item.id);
 
     await user.save();
