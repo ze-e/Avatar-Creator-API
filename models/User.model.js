@@ -71,7 +71,7 @@ const userSchema = new Schema({
     gold: {
       type: Number,
       required: true,
-      default: 30,
+      default: 3000,
     },
     type: {
       type: String,
