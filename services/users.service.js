@@ -131,6 +131,23 @@ exports.addToInventory = async (userId, item) => {
   }
 };
 
+// Remove item from inventory of user with userId
+exports.removeFromInventory = async (userId, item) => {
+  try {
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error(`User not found`);
+    }
+    if (!item.id) throw new Error(`Invalid item`);
+    user.data.inventory = user.data.inventory.filter(i => i.id !== item.id);
+
+    await user.save();
+    return sanitizeUser(user);
+  } catch (error) {
+    throw new Error(`Could not buy item: ${error}`);
+  }
+};
+
 // Equip gear to user with userId
 exports.equipItem = async (userId, item) => {
   try {

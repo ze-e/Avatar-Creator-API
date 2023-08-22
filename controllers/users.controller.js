@@ -92,6 +92,20 @@ exports.addToInventory = async (req, res) => {
   }
 };
 
+exports.removeFromInventory = async (req, res) => {
+  if (!req.user)
+    return res.status(403).json({ error: "User must be signed in" });
+  if (!req.body.item) return res.status(400).json({ error: "Invalid item" });
+  try {
+    user = await userService.removeFromInventory(req.params.id, req.body.item);
+    res
+      .status(200)
+      .json({ data: user.data.inventory, message: "updated user inventory" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // equip item
 exports.equipItem = async (req, res) => {
   if (!req.user)
