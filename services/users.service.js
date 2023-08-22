@@ -110,6 +110,59 @@ exports.updateUser = async (userId, newVals, isAdmin) => {
   }
 }
 
+// Add item to inventory of user with userId
+exports.addToInventory = async (userId, item) => {
+  try {
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error(`User not found`);
+    }
+    const inventory =  user.data.inventory;
+    const gold = user.data.gold;
+    user.data.gold = gold - item.cost;
+    user.data.inventory = [...inventory, item.id];
+
+    await user.save();
+    return sanitizeUser(user);
+  } catch (error) {
+    throw new Error(`Could not buy item: ${error}`);
+  }
+};
+
+// Equip gear to user with userId
+exports.equipItem = async (userId, item) => {
+  try {
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error(`User not found`);
+    }
+
+    user.data.gear[item.location] = item.id;
+
+    await user.save();
+    return sanitizeUser(user);
+  } catch (error) {
+    throw new Error(`Could not buy item: ${error}`);
+  }
+};
+
+// Unequip gear to inventory of user with userId
+exports.unequipItem = async (userId, item) => {
+  try {
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error(`User not found`);
+    }
+
+    user.data.gear[item.location] = "";
+
+    await user.save();
+    return sanitizeUser(user);
+  } catch (error) {
+    throw new Error(`Could not buy item: ${error}`);
+  }
+};
+
 // DELETE method to delete a user by userId
 exports.deleteUser  = async (userId) =>{
   try {

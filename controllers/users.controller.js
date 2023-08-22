@@ -77,3 +77,45 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// user gear and inventory
+exports.addToInventory = async (req, res) => {
+  if (!req.user)
+    return res.status(403).json({ error: "User must be signed in" });
+  if (!req.body.item)
+    return res.status(403).json({ error: "Invalid item" });
+  try {
+    user = await userService.addToInventory(req.params.id, req.body.item);
+    res.status(200).json({ data: user.data.inventory, message: "updated user inventory" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// equip item
+exports.equipItem = async (req, res) => {
+  if (!req.user)
+    return res.status(403).json({ error: "User must be signed in" });
+  if (!req.body.item)
+    return res.status(403).json({ error: "Invalid item" });
+  try {
+    user = await userService.equipItem(req.params.id, req.body.item);
+    res.status(200).json({ data: user.data.gear, message: `equipped ${req.body.item.name}` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// unequip item
+exports.unequipItem = async (req, res) => {
+  if (!req.user)
+    return res.status(403).json({ error: "User must be signed in" });
+  if (!req.body.item)
+    return res.status(403).json({ error: "Invalid item" });
+  try {
+    user = await userService.unequipItem(req.params.id, req.body.item);
+    res.status(200).json({ data: user.data.gear, message: `unequipped ${req.body.item.name}` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
