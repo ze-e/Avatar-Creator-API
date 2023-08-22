@@ -139,12 +139,12 @@ exports.removeFromInventory = async (userId, item) => {
       throw new Error(`User not found`);
     }
     if (!item.id) throw new Error(`Invalid item`);
-    user.data.inventory = user.data.inventory.filter(i => i.id !== item.id);
+    user.data.inventory = user.data.inventory.filter(i => i !== item.id);
 
     await user.save();
     return sanitizeUser(user);
   } catch (error) {
-    throw new Error(`Could not buy item: ${error}`);
+    throw new Error(`Could not remove item: ${error}`);
   }
 };
 
@@ -162,7 +162,7 @@ exports.equipItem = async (userId, item) => {
     await user.save();
     return sanitizeUser(user);
   } catch (error) {
-    throw new Error(`Could not buy item: ${error}`);
+    throw new Error(`Could not equip item: ${error}`);
   }
 };
 
@@ -180,7 +180,7 @@ exports.unequipItem = async (userId, item) => {
     await user.save();
     return sanitizeUser(user);
   } catch (error) {
-    throw new Error(`Could not buy item: ${error}`);
+    throw new Error(`Could not unequip item: ${error}`);
   }
 };
 
