@@ -117,8 +117,10 @@ exports.addToInventory = async (userId, item) => {
     if (!user) {
       throw new Error(`User not found`);
     }
-    const inventory =  user.data.inventory;
+    if (!item.id) throw new Error(`Invalid item`);
+    const inventory = user.data.inventory;
     const gold = user.data.gold;
+    if (gold - item.cost < 1) throw new Error(`Not enough gold for item. Need $${ item.cost }`);
     user.data.gold = gold - item.cost;
     user.data.inventory = [...inventory, item.id];
 
@@ -137,6 +139,7 @@ exports.equipItem = async (userId, item) => {
       throw new Error(`User not found`);
     }
 
+    if (!item.id || !item.location) throw new Error(`Invalid item`);
     user.data.gear[item.location] = item.id;
 
     await user.save();
@@ -154,6 +157,7 @@ exports.unequipItem = async (userId, item) => {
       throw new Error(`User not found`);
     }
 
+    if (!item.id || !item.location) throw new Error(`Invalid item`);
     user.data.gear[item.location] = "";
 
     await user.save();
