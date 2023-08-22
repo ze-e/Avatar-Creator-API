@@ -80,7 +80,7 @@ exports.updateUser = async (userId, newVals, isAdmin) => {
     if (!user) {
       throw new Error(`User not found`);
     }
-
+    const oldUser = { ...user };
     const data = isAdmin ? user.admin : user.data;
 
     if (Array.isArray(newVals)) {
@@ -105,7 +105,8 @@ exports.updateUser = async (userId, newVals, isAdmin) => {
     else user.admin = data;
 
     await user.save();
-    return sanitizeUser(user);
+    // return sanitizeUser(user);
+    return {oldUser, user, newVals, type: typeof newVals };
   } catch (error) {
     throw new Error(`Error while updating user information: ${error}`);
   }
