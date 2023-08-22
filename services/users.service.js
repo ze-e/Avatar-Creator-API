@@ -106,7 +106,7 @@ exports.updateUser = async (userId, newVals, isAdmin) => {
 
     await user.save();
     // return sanitizeUser(user);
-    return {oldUser, user, newVals, type: typeof newVals };
+    return { oldUser, user, newVals, type: Array.isArray(newVals) };
   } catch (error) {
     throw new Error(`Error while updating user information: ${error}`);
   }
