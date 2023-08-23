@@ -1,7 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
-const {sanitizeUser} = require("../utils/user")
+const { sanitizeUser, saveLastState } = require("../utils/user");
+const { gainLevel } = require("../utils/levels");
+const { seedLevelTable } = require("../data/levels.sample.data");
 
 // GET all user objects
 exports.getAllUsers = async (isAdmin) => {
@@ -54,18 +56,19 @@ exports.loginUser = async ({userName, password}) => {
 }
 
 // POST method to add a new user
-exports.createUser = async (userName, email, password) => {
+exports.createUser = async (userName, email, password, isAdmin) => {
   try {
     const userData = {
       admin: {
         userName,
         email,
-        password: await bcrypt.hash(password, 10)
+        password: await bcrypt.hash(password, 10),
+        userType: isAdmin ? 'admin' : 'user'
       },
       data: {
-        name: userName
-      }
-    }
+        name: userName,
+      },
+    };
     const user = await User.create(userData);
     return user;
   } catch (error) {
@@ -191,5 +194,57 @@ exports.deleteUser  = async (userId) =>{
     await User.findOneAndDelete({ _id: userId });
   } catch (error) {
     throw new Error(`Error while deleting user`);
+  }
+}
+
+/* Admin */
+
+// increase xp and gold by amount
+exports.gainXP = async(userId, amount, isAdmin) => {
+  try {
+    if (!isAdmin) throw new Error(`Only admins have access to this route`);
+    let user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error(`User not found`);
+    }
+
+    user.data.gold = parseInt(user.data.gold) + parseInt(amount)
+    user.data.xp = parseInt(user.data.xp) + parseInt(amount)
+    user.data.level = gainLevel(seedLevelTable(), user.data.xp, user.data.level)
+
+    // add key and value to previous data
+    const prevData = [{ key: 'xp', value: prevXP }, { key: 'level', value: prevLVL }, { key: 'gold', value: prevGold }] // also add previous level
+    user = saveLastState(user, prevData);
+    user.save();
+    return user;
+  }
+  catch (error) {
+    throw new Error(`Error while gaining xp: ${error}`);
+  }
+}
+
+exports.undo = async (userId, key) => {
+  try {
+    if (!isAdmin) throw new Error(`Only admins have access to this route`);
+    const user = await User.findOne({ _id: userId });
+    // reset values
+    if (Array.isArray(key)) {
+      key.forEach((k) => {
+        const prevData = user.admin.prevData
+        user.data[k] = prevData.find(d => d.key === k).value
+      })
+      // erase from prevData
+      user.admin.prevData = user.admin.prevData.filter(i => !key.includes(i.key))
+    } else {
+      const prevData = user.admin.prevData
+      user.data[key] = prevData.find(d => d.key === key).value
+      // erase from prevData
+      user.admin.prevData = user.admin.prevData.filter(i => i.key !== key)
+    }
+    user.save();
+    return user;
+  }
+  catch (error) {
+    throw new Error(`Error while gaining xp: ${error}`);
   }
 }

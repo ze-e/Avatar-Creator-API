@@ -14,6 +14,8 @@ const {
   removeFromInventory,
   equipItem,
   unequipItem,
+  gainXP,
+  undo
 } = require("../controllers/users.controller");
 
 const router = express.Router();
@@ -36,5 +38,9 @@ router
   .delete(removeFromInventory);
 router.route("/user/:id/gear/equip").patch(equipItem);
 router.route("/user/:id/gear/unequip").patch(unequipItem);
+
+// admin
+router.route("/user/:id/xp").patch(gainXP);
+router.route("/user/:id/undo").patch(undo);
 
 module.exports = router;

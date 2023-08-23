@@ -42,7 +42,7 @@ exports.loginUser = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const user = await userService.createUser(req.body.userName, req.body.email, req.body.password);
+    const user = await userService.createUser(req.body.userName, req.body.email, req.body.password, req.body.isAdmin);
     res.status(200).json({data: user.data, message:  `successfully created user ${user.admin.userName}` });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -129,6 +129,48 @@ exports.unequipItem = async (req, res) => {
   try {
     user = await userService.unequipItem(req.params.id, req.body.item);
     res.status(200).json({ data: user.data.gear, message: `unequipped ${req.body.item.name}` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+/* Admin */
+exports.gainXP = async (req, res) => {
+  if (!req.user)
+    return res.status(403).json({ error: "User must be signed in" });
+  try {
+    let user;
+    if (!req.isAdmin && req.user !== req.params.id)
+      return res
+        .status(403)
+        .json({ error: "Only user and admins can edit user" });
+    else
+      user = await userService.gainXP(
+        req.params.id,
+        req.body.amount,
+        req.isAdmin
+      );
+    res.status(200).json({ data: user, message: "user gained xp!" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.undo = async (req, res) => {
+  if (!req.user)
+    return res.status(403).json({ error: "User must be signed in" });
+  try {
+    let user;
+    if (!req.isAdmin && req.user !== req.params.id)
+      return res
+        .status(403)
+        .json({ error: "Only user and admins can edit user" });
+    else
+      user = await userService.undo(
+        req.params.id,
+        req.body.key,
+      );
+    res.status(200).json({ data: user, message: "undo completed" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
