@@ -233,7 +233,7 @@ exports.gainXP = async(userId, amount, isAdmin) => {
   }
 }
 
-exports.undo = async (userId, key) => {
+exports.undo = async (userId, key, isAdmin) => {
   try {
     if (!isAdmin) throw new Error(`Only admins have access to this route`);
     const user = await User.findOne({ _id: userId });
