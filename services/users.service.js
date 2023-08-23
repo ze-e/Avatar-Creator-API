@@ -208,13 +208,23 @@ exports.gainXP = async(userId, amount, isAdmin) => {
       throw new Error(`User not found`);
     }
 
-    user.data.gold = parseInt(user.data.gold) + parseInt(amount)
-    user.data.xp = parseInt(user.data.xp) + parseInt(amount)
-    user.data.level = gainLevel(seedLevelTable(), user.data.xp, user.data.level)
-
-    // add key and value to previous data
-    const prevData = [{ key: 'xp', value: prevXP }, { key: 'level', value: prevLVL }, { key: 'gold', value: prevGold }] // also add previous level
+    // save old values in undo
+    const prevData = [
+      { key: "xp", value: user.data.xp },
+      { key: "level", value: user.data.level },
+      { key: "gold", value: user.data.gold },
+    ]; // also add previous level
     user = saveLastState(user, prevData);
+
+    // create new values
+    user.data.gold = parseInt(user.data.gold) + parseInt(amount);
+    user.data.xp = parseInt(user.data.xp) + parseInt(amount);
+    user.data.level = gainLevel(
+      seedLevelTable(),
+      user.data.xp,
+      user.data.level
+    );
+
     user.save();
     return user;
   }
