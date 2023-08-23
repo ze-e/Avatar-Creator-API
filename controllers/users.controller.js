@@ -169,6 +169,7 @@ exports.undo = async (req, res) => {
       user = await userService.undo(
         req.params.id,
         req.body.key,
+        req.isAdmin
       );
     res.status(200).json({ data: user, message: "undo completed" });
   } catch (err) {
