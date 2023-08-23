@@ -237,22 +237,26 @@ exports.undo = async (userId, key, isAdmin) => {
   try {
     if (!isAdmin) throw new Error(`Only admins have access to this route`);
     const user = await User.findOne({ _id: userId });
-    // reset values
-    if (Array.isArray(key)) {
-      key.forEach((k) => {
+    try {
+      // reset values
+      if (Array.isArray(key)) {
+        key.forEach((k) => {
+          const prevData = user.admin.prevData
+          user.data[k] = prevData.find(d => d.key === k).value
+        })
+        // erase from prevData
+        user.admin.prevData = user.admin.prevData.filter(i => !key.includes(i.key))
+      } else {
         const prevData = user.admin.prevData
-        user.data[k] = prevData.find(d => d.key === k).value
-      })
-      // erase from prevData
-      user.admin.prevData = user.admin.prevData.filter(i => !key.includes(i.key))
-    } else {
-      const prevData = user.admin.prevData
-      user.data[key] = prevData.find(d => d.key === key).value
-      // erase from prevData
-      user.admin.prevData = user.admin.prevData.filter(i => i.key !== key)
-      user.admin.lastUpdated = null
+        user.data[key] = prevData.find(d => d.key === key).value
+        // erase from prevData
+        user.admin.prevData = user.admin.prevData.filter(i => i.key !== key)
+        user.admin.lastUpdated = null
+      }
+      user.save();
+    } catch (e) {
+      throw new Error(`Error updating keys: ${e}`);
     }
-    user.save();
     return user;
   }
   catch (error) {
