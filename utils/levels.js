@@ -1,4 +1,4 @@
-module.exports.getLevelByXP = (levelData, xp) => {
+const getLevelByXP = (levelData, xp) => {
   let closestKey = null;
   let closestDistance = Infinity;
 
@@ -13,11 +13,16 @@ module.exports.getLevelByXP = (levelData, xp) => {
   return parseInt(closestKey);
 }
 
-module.exports.gainLevel = (leveldata, xp, userLevel) => {
+const gainLevel = (leveldata, xp, userLevel) => {
   const newLevel = getLevelByXP(leveldata, xp);
   if (newLevel > userLevel) {
     console.log("User gained a level!");
     return newLevel;
   }
   return userLevel;
+}
+
+module.exports = {
+  getLevelByXP,
+  gainLevel
 }
