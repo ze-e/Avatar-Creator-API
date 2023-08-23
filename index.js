@@ -50,7 +50,13 @@ const jsonParser = bodyParser.json()
 
 app.use(jsonParser);
 const cors = require("cors");
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use("/", userRoutes);
 app.use("/ping", ping)
