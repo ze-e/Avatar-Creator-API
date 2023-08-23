@@ -250,6 +250,7 @@ exports.undo = async (userId, key, isAdmin) => {
       user.data[key] = prevData.find(d => d.key === key).value
       // erase from prevData
       user.admin.prevData = user.admin.prevData.filter(i => i.key !== key)
+      user.admin.lastUpdated = null
     }
     user.save();
     return user;
