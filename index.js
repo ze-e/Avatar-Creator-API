@@ -53,7 +53,7 @@ const cors = require("cors");
 // app.use(cors());
 const corsOptions = {
   methods: ["GET", "POST", "PATCH", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "Access-Control-Allow-Origin"],
 };
 
 app.use(cors(corsOptions));
