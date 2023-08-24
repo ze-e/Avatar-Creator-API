@@ -45,12 +45,12 @@ else connectToDB();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+// create application/json parser
+const jsonParser = bodyParser.json()
 
-// set up cors
+app.use(jsonParser);
 const cors = require("cors");
 app.use(cors());
-// app.options("*", cors()); // enable pre-flight
 
 app.use("/", userRoutes);
 app.use("/ping", ping)
