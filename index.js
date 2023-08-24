@@ -52,12 +52,6 @@ app.options("*", cors()); // enable pre-flight
 
 app.use(bodyParser.json({ verify: rawBodyHandler }));
 
-// create application/json parser
-const jsonParser = bodyParser.json()
-
-app.use(jsonParser);
-
-
 app.use("/", userRoutes);
 app.use("/ping", ping)
 
