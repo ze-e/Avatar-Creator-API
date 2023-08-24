@@ -6,10 +6,10 @@ const { gainLevel } = require("../utils/levels");
 const { seedLevelTable } = require("../data/levels.sample.data");
 
 // GET all user objects
-exports.getAllUsers = async (isAdmin) => {
+exports.getAllUsers = async (role) => {
   try {
     const users = await User.find();
-    if (!isAdmin) users.map((u) => sanitizeUser(u)); // delete admin fields
+    if (role !== "admin") users.map((u) => sanitizeUser(u)); // delete admin fields
     return users;
   } catch (error) {
     throw new Error(`Error while retrieving users: ${error}`);
@@ -29,10 +29,10 @@ exports.getCurrentUser = async (userId) => {
 };
 
 // GET one user object by id
-exports.getUserById = async (userId, isAdmin) => {
+exports.getUserById = async (userId, role) => {
   try {
     const user = await User.findOne({ _id: userId });
-    return !isAdmin ? sanitizeUser(user) : user;
+    return role !== "admin" ? sanitizeUser(user) : user;
   } catch (error) {
     throw new Error(`Error while retrieving user: ${error}`);
   }
@@ -56,14 +56,13 @@ exports.loginUser = async ({userName, password}) => {
 }
 
 // POST method to add a new user
-exports.createUser = async (userName, email, password, isAdmin) => {
+exports.createUser = async (userName, email, password) => {
   try {
     const userData = {
       admin: {
         userName,
         email,
         password: await bcrypt.hash(password, 10),
-        userType: isAdmin ? 'admin' : 'user'
       },
       data: {
         name: userName,
@@ -77,13 +76,13 @@ exports.createUser = async (userName, email, password, isAdmin) => {
 }
 
 // PATCH method to update user
-exports.updateUser = async (userId, newVals, isAdmin) => {
+exports.updateUser = async (userId, newVals, role) => {
   try {
     const user = await User.findOne({ _id: userId });
     if (!user) {
       throw new Error(`User not found`);
     }
-    const data = isAdmin ? user.admin : user.data;
+    const data = role ? user.admin : user.data;
 
     if (Array.isArray(newVals)) {
       // If newVals is an array of key-value pairs
@@ -103,7 +102,7 @@ exports.updateUser = async (userId, newVals, isAdmin) => {
       }
     }
 
-    if (!isAdmin) user.data = data;
+    if (!role) user.data = data;
     else user.admin = data;
 
     await user.save();
@@ -194,72 +193,5 @@ exports.deleteUser  = async (userId) =>{
     await User.findOneAndDelete({ _id: userId });
   } catch (error) {
     throw new Error(`Error while deleting user`);
-  }
-}
-
-/* Admin */
-
-// increase xp and gold by amount
-exports.gainXP = async(userId, amount, isAdmin) => {
-  try {
-    if (!isAdmin) throw new Error(`Only admins have access to this route`);
-    let user = await User.findOne({ _id: userId });
-    if (!user) {
-      throw new Error(`User not found`);
-    }
-
-    // save old values in undo
-    const prevData = [
-      { key: "xp", value: user.data.xp },
-      { key: "level", value: user.data.level },
-      { key: "gold", value: user.data.gold },
-    ]; // also add previous level
-    user = saveLastState(user, prevData);
-
-    // create new values
-    user.data.gold = parseInt(user.data.gold) + parseInt(amount);
-    user.data.xp = parseInt(user.data.xp) + parseInt(amount);
-    user.data.level = gainLevel(
-      seedLevelTable(),
-      user.data.xp,
-      user.data.level
-    );
-
-    user.save();
-    return user;
-  }
-  catch (error) {
-    throw new Error(`Error while gaining xp: ${error}`);
-  }
-}
-
-exports.undo = async (userId, key, isAdmin) => {
-  try {
-    if (!isAdmin) throw new Error(`Only admins have access to this route`);
-    const user = await User.findOne({ _id: userId });
-    try {
-      // reset values
-      if (Array.isArray(key)) {
-        key.forEach((k) => {
-          const prevData = user.admin.prevData
-          user.data[k] = prevData.find(d => d.key === k).value
-        })
-        // erase from prevData
-        user.admin.prevData = user.admin.prevData.filter(i => !key.includes(i.key))
-      } else {
-        const prevData = user.admin.prevData
-        user.data[key] = prevData.find(d => d.key === key).value
-        // erase from prevData
-        user.admin.prevData = user.admin.prevData.filter(i => i.key !== key)
-      }
-      user.admin.lastUpdated = null;
-      user.save();
-    } catch (e) {
-      throw new Error(`Error updating keys: ${e}`);
-    }
-    return user;
-  }
-  catch (error) {
-    throw new Error(`Error while gaining xp: ${error}`);
   }
 }

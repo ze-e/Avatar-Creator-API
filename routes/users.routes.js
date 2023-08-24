@@ -1,6 +1,6 @@
 const express = require("express");
 const verifyToken = require("../middleware/verifyToken");
-const verifyAdmin = require("../middleware/verifyAdmin");
+const verifyRole = require("../middleware/verifyRole");
 
 const {
   getAllUsers,
@@ -20,7 +20,7 @@ const {
 
 const router = express.Router();
 
-router.use(verifyToken, verifyAdmin);
+router.use(verifyToken, verifyRole);
 router.route("/users").get(getAllUsers);
 router.route("/login").post(loginUser);
 router.route("/register").post(createUser);
@@ -38,9 +38,5 @@ router
   .delete(removeFromInventory);
 router.route("/user/:id/gear/equip").patch(equipItem);
 router.route("/user/:id/gear/unequip").patch(unequipItem);
-
-// admin
-router.route("/user/:id/xp").patch(gainXP);
-router.route("/user/:id/undo").patch(undo);
 
 module.exports = router;

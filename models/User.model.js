@@ -27,7 +27,7 @@ const userSchema = new Schema({
     userType: {
       type: String,
       required: true,
-      enum: ["user", "admin"],
+      enum: ["user", "admin", "teacher"],
       default: "user",
     },
     lastUpdated: {
@@ -117,33 +117,42 @@ const userSchema = new Schema({
     gear: {
       head: {
         type: String,
-        default: ""
+        default: "",
       },
-      RHand:
-      {
+      RHand: {
         type: String,
-        default: ""
+        default: "",
       },
       legs: {
         type: String,
-        default: ""
+        default: "",
       },
       body: {
         type: String,
-        default: ""
+        default: "",
       },
-      LHand:
-      {
+      LHand: {
         type: String,
-        default: ""
+        default: "",
       },
       feet: {
         type: String,
-        default: ""
+        default: "",
       },
-
     },
     inventory: [String],
+  },
+  teacherData: {
+    students: {
+      type: Array[string],
+      default: [],
+    },
+  },
+  studentData: {
+    teacher: {
+      type: Array[string],
+      default: null,
+    },
   },
 });
 
@@ -169,6 +178,20 @@ userSchema.pre('save', async function(next) {
     return next(err);
   }
 
+  next();
+});
+
+// Pre-save middleware to conditionally delete fields
+userSchema.pre("save", function (next) {
+  if (this.admin.userType === "teacher" || this.admin.userType === "admin") {
+    this.studentData = undefined;
+  }
+  if (
+    this.admin.userType === "user" ||
+    this.admin.userType === "admin"
+  ) {
+    this.teacherData = undefined;
+  }
   next();
 });
 

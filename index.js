@@ -1,4 +1,6 @@
 const userRoutes = require("./routes/users.routes");
+const adminRoutes = require("./routes/admin.routes");
+const teacherRoutes = require("./routes/teacher.routes");
 const ping = require("./routes/ping.routes");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -53,6 +55,8 @@ const cors = require("cors");
 app.use(cors());
 
 app.use("/", userRoutes);
+app.use("/teacher", teacherRoutes);
+app.use("/admin", adminRoutes);
 app.use("/ping", ping)
 
 module.exports = app.listen(port, () => {
