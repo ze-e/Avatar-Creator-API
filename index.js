@@ -45,19 +45,12 @@ else connectToDB();
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(bodyParser.json());
+
 // set up cors
 const cors = require("cors");
 app.use(cors());
-app.options("*", cors()); // enable pre-flight
-
-const rawBodyHandler = function (req, res, buf, encoding) {
-  if (buf && buf.length) {
-    req.rawBody = buf.toString(encoding || "utf8");
-    console.log("Raw body: " + req.rawBody);
-  }
-};
-
-app.use(bodyParser.json({ verify: rawBodyHandler }));
+// app.options("*", cors()); // enable pre-flight
 
 app.use("/", userRoutes);
 app.use("/ping", ping)
