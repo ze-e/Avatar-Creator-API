@@ -48,6 +48,9 @@ const port = process.env.PORT || 3000;
 // set up cors
 const cors = require("cors");
 app.use(cors());
+app.options("*", cors()); // enable pre-flight
+
+app.use(bodyParser.json({ verify: rawBodyHandler }));
 
 // create application/json parser
 const jsonParser = bodyParser.json()
