@@ -50,6 +50,7 @@ const jsonParser = bodyParser.json()
 
 app.use(jsonParser);
 const cors = require("cors");
+app.use(cors());
 
 app.use("/", userRoutes);
 app.use("/ping", ping)
