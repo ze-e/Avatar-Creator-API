@@ -13,10 +13,10 @@ const {
 const router = express.Router();
 
 router.use(verifyToken, verifyRole);
-router.route("/students").get(getAllStudents);
-router.route("/student/:id/xp").patch(gainXP);
-router.route("/student/:id/undo").patch(undo);
-router.route("/student/:id/add").patch(removeStudent);
-router.route("/student/:id/remove").patch(addStudent);
+router.route("/").get(getAllStudents);
+router.route("/:id/xp").patch(gainXP);
+router.route("/:id/undo").patch(undo);
+router.route("/:id/add").patch(addStudent);
+router.route("/:id/remove").patch(removeStudent);
 
 module.exports = router;

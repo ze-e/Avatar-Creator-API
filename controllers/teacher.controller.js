@@ -1,4 +1,4 @@
-const userService = require("../services/users.service");
+const userService = require("../services/teacher.service");
 
 exports.getAllStudents = async (req, res) => {
   try {

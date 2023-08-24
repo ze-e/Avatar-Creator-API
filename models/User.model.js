@@ -144,13 +144,13 @@ const userSchema = new Schema({
   },
   teacherData: {
     students: {
-      type: Array[string],
-      default: [],
+      type: [String],
+      default:[]
     },
   },
   studentData: {
     teacher: {
-      type: Array[string],
+      type: String,
       default: null,
     },
   },

@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
+const updateExistingUsers = require("./migrations/teacherStudentData");
+
 /* DATABASE */
 
 const isLocal = process.env.ISLOCAL || false;
@@ -55,9 +57,9 @@ const cors = require("cors");
 app.use(cors());
 
 app.use("/", userRoutes);
-app.use("/teacher", teacherRoutes);
+app.use("/students", teacherRoutes);
 app.use("/admin", adminRoutes);
-app.use("/ping", ping)
+app.use("/ping", ping);
 
 module.exports = app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
