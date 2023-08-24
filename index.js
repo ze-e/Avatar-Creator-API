@@ -50,6 +50,13 @@ const cors = require("cors");
 app.use(cors());
 app.options("*", cors()); // enable pre-flight
 
+const rawBodyHandler = function (req, res, buf, encoding) {
+  if (buf && buf.length) {
+    req.rawBody = buf.toString(encoding || "utf8");
+    console.log("Raw body: " + req.rawBody);
+  }
+};
+
 app.use(bodyParser.json({ verify: rawBodyHandler }));
 
 app.use("/", userRoutes);
