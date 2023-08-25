@@ -77,9 +77,6 @@ exports.removeStudent = async (userId, role, teacherId) => {
       throw new Error(`Teacher not found`);
     }
 
-    if (!teacher.teacherData.students.includes(userId))
-      throw new Error(`Student must be of teacher`);
-
     const user = await User.findOne({ _id: userId });
     if (!user) {
       throw new Error(`User not found`);
