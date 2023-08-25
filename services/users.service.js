@@ -9,7 +9,7 @@ const { seedLevelTable } = require("../data/levels.sample.data");
 exports.getAllUsers = async (role) => {
   try {
     const users = await User.find();
-    if (role !== "admin") users.map((u) => sanitizeUser(u)); // delete admin fields
+    if (role === "user") users.map((u) => sanitizeUser(u)); // delete admin fields
     return users;
   } catch (error) {
     throw new Error(`Error while retrieving users: ${error}`);
