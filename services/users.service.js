@@ -32,7 +32,7 @@ exports.getCurrentUser = async (userId) => {
 exports.getUserById = async (userId, role) => {
   try {
     const user = await User.findOne({ _id: userId });
-    return role !== "admin" ? sanitizeUser(user) : user;
+    return role === "user" ? sanitizeUser(user) : user;
   } catch (error) {
     throw new Error(`Error while retrieving user: ${error}`);
   }
