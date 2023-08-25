@@ -2,6 +2,7 @@ const User = require("../models/User.model");
 const { sanitizeUser, saveLastState } = require("../utils/user");
 const { gainLevel } = require("../utils/levels");
 const { seedLevelTable } = require("../data/levels.sample.data");
+const { connections } = require("mongoose");
 
 // GET all students objects
 exports.getAllStudents = async (userId, role) => {
@@ -70,7 +71,7 @@ exports.removeStudent = async (userId, role, teacherId) => {
     if (role !== "teacher")
       throw new Error(`Only teachers have access to this route`);
 
-    let teacher = await User.findOne({ _id: teacherId });
+    const teacher = await User.findOne({ _id: teacherId });
 
     if (!teacher) {
       throw new Error(`Teacher not found`);
@@ -79,9 +80,13 @@ exports.removeStudent = async (userId, role, teacherId) => {
     if (!teacher.teacherData.students.includes(userId))
       throw new Error(`Student must be of teacher`);
 
-    let user = await User.findOne({ _id: userId });
+    const user = await User.findOne({ _id: userId });
     if (!user) {
       throw new Error(`User not found`);
+    }
+
+    if (user.admin.userType !== 'user') {
+      throw new Error(`User must be student`);
     }
 
     teacher.teacherData.students = user.teacherData.students.filter(
@@ -102,7 +107,7 @@ exports.addStudent = async (userId, role, teacherId) => {
   try {
     if (role !== 'teacher') throw new Error(`Only teachers have access to this route`);
 
-    let teacher = await User.findOne({ _id: teacherId });
+    const teacher = await User.findOne({ _id: teacherId });
 
     if (!teacher) {
       throw new Error(`Teacher not found`);
@@ -111,9 +116,13 @@ exports.addStudent = async (userId, role, teacherId) => {
     if (teacher.teacherData.students.includes(userId))
     throw new Error(`Student is already assigned to teacher`);
 
-    let user = await User.findOne({ _id: userId });
+    const user = await User.findOne({ _id: userId });
     if (!user) {
       throw new Error(`User not found`);
+    }
+
+    if (user.admin.userType !== "user") {
+      throw new Error(`User must be student`);
     }
 
     teacher.teacherData.students = teacher.teacherData.students.concat(userId);
