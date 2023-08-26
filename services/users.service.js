@@ -82,7 +82,7 @@ exports.updateUser = async (userId, newVals, role) => {
     if (!user) {
       throw new Error(`User not found`);
     }
-    const data = role ? user.admin : user.data;
+    const data = user.data;
 
     if (Array.isArray(newVals)) {
       // If newVals is an array of key-value pairs
@@ -102,8 +102,7 @@ exports.updateUser = async (userId, newVals, role) => {
       }
     }
 
-    if (!role) user.data = data;
-    else user.admin = data;
+    user.data = data;
 
     await user.save();
     return sanitizeUser(user);
