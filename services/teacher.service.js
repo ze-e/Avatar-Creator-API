@@ -2,7 +2,6 @@ const User = require("../models/User.model");
 const { sanitizeUser, saveLastState } = require("../utils/user");
 const { gainLevel } = require("../utils/levels");
 const { seedLevelTable } = require("../data/levels.sample.data");
-const { connections } = require("mongoose");
 
 // GET all students objects
 exports.getAllStudents = async (userId, role) => {

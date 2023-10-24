@@ -1,9 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
-const { sanitizeUser, saveLastState } = require("../utils/user");
-const { gainLevel } = require("../utils/levels");
-const { seedLevelTable } = require("../data/levels.sample.data");
+const { sanitizeUser } = require("../utils/user");
 
 // GET all user objects
 exports.getAllUsers = async (role) => {

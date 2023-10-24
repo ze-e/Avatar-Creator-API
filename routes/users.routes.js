@@ -14,8 +14,6 @@ const {
   removeFromInventory,
   equipItem,
   unequipItem,
-  gainXP,
-  undo
 } = require("../controllers/users.controller");
 
 const router = express.Router();
