@@ -81,3 +81,47 @@ exports.undo = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.addBadge = async (req, res) => {
+  if (!req.user)
+    return res.status(403).json({ error: "User must be signed in" });
+  try {
+    let user;
+    if (req.role !== "teacher")
+      return res.status(403).json({ error: "Only teacher can edit user" });
+    else
+      user = await userService.addBadge(
+        req.params.id,
+        req.body.badgeId,
+        req.role,
+        req.user
+      );
+    res
+      .status(200)
+      .json({ data: user, message: `user gained badge: ${req.body.badgeId}` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.removeBadge = async (req, res) => {
+  if (!req.user)
+    return res.status(403).json({ error: "User must be signed in" });
+  try {
+    let user;
+    if (req.role !== "teacher")
+      return res.status(403).json({ error: "Only teacher can edit user" });
+    else
+      user = await userService.removeBadge(
+        req.params.id,
+        req.body.badgeId,
+        req.role,
+        req.user
+      );
+    res
+      .status(200)
+      .json({ data: user, message: `removed badge: ${req.body.badgeId}` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

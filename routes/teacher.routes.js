@@ -7,7 +7,9 @@ const {
   gainXP,
   undo,
   removeStudent,
-  addStudent
+  addStudent,
+  addBadge,
+  removeBadge
 } = require("../controllers/teacher.controller");
 
 const router = express.Router();
@@ -18,5 +20,8 @@ router.route("/:id/xp").patch(gainXP);
 router.route("/:id/undo").patch(undo);
 router.route("/:id/add").patch(addStudent);
 router.route("/:id/remove").patch(removeStudent);
+
+router.route("/:id/addBadge").patch(addBadge);
+router.route("/:id/removeBadge").patch(removeBadge);
 
 module.exports = router;

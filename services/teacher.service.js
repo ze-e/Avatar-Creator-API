@@ -172,3 +172,61 @@ exports.undo = async (userId, key, role, teacherId) => {
     throw new Error(`Error while gaining xp: ${error}`);
   }
 };
+
+// add badge to student
+exports.addBadge = async (userId, badgeId, role, teacherId) => {
+  try {
+    if (role !== 'teacher') throw new Error(`Only teachers have access to this route`);
+
+    let teacher = await User.findOne({ _id: teacherId });
+
+    if (!teacher) {
+      throw new Error(`Teacher not found`);
+    }
+
+    if (!teacher.teacherData.students.includes(userId))
+    throw new Error(`Student must be of teacher`);
+
+    let user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error(`User not found`);
+    }
+
+    // create new values
+    user.data.badges = [...user.data.badges, badgeId]
+
+    user.save();
+    return user;
+  } catch (error) {
+    throw new Error(`Error while adding badge: ${error}`);
+  }
+};
+
+// remove badge from student
+exports.removeBadge = async (userId, badgeId, role, teacherId) => {
+  try {
+    if (role !== 'teacher') throw new Error(`Only teachers have access to this route`);
+
+    let teacher = await User.findOne({ _id: teacherId });
+
+    if (!teacher) {
+      throw new Error(`Teacher not found`);
+    }
+
+    if (!teacher.teacherData.students.includes(userId))
+    throw new Error(`Student must be of teacher`);
+
+    let user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error(`User not found`);
+    }
+
+    // create new values
+    user.data.badges = user.data.badges.filter(b => b.id !== badgeId);
+
+    user.save();
+    return user;
+  } catch (error) {
+    throw new Error(`Error while removing badge: ${error}`);
+  }
+};
