@@ -141,6 +141,7 @@ const userSchema = new Schema({
       },
     },
     inventory: [String],
+    badges: [String]
   },
   teacherData: {
     students: {
