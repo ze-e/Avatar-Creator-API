@@ -39,7 +39,7 @@ exports.getUserById = async (userId, role) => {
 // POST method to login a user
 exports.loginUser = async ({userName, password}) => {
   try {
-    let user = {};
+    let user = null;
 
     user = await User.findOne({ "admin.userName": userName })
     if (!user) user = await User.findOne({ "admin.email": userName });
@@ -50,7 +50,7 @@ exports.loginUser = async ({userName, password}) => {
         return token;
     } else throw new Error("Invalid userName or password");
   } catch (e) {
-    throw new Error(`Error signing in`);
+    throw new Error(e);
   }
 }
 
