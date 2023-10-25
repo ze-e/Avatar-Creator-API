@@ -192,7 +192,7 @@ exports.addBadge = async (userId, badgeId, role, teacherId) => {
     }
 
     // create new values
-    if (user.data.badges.includes(badgeId)) user.data.badges = [...user.data.badges, badgeId]
+    if (!user.data.badges.includes(badgeId)) user.data.badges = [...user.data.badges, badgeId]
     else throw new Error(`Badge already added to user`);
 
     user.save();

@@ -42,7 +42,8 @@ exports.loginUser = async ({userName, password}) => {
     let user = {};
 
     user = await User.findOne({ "admin.userName": userName })
-    if(!user) user = await User.findOne({ "admin.email": userName });
+    if (!user) user = await User.findOne({ "admin.email": userName });
+    if (!user) throw new Error("Invalid userName or password");
 
     if (await bcrypt.compare(password, user.admin.password)) {
         const token = jwt.sign({ userId: user._id }, process.env.SECRETKEY, { expiresIn: "7d" });
