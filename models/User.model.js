@@ -85,7 +85,7 @@ const userSchema = new Schema({
     },
     epiphet: {
       type: String,
-      default: "the newcomer",
+      default: "newcomer",
     },
     job: {
       type: String,
