@@ -1,6 +1,6 @@
 const User = require("../models/User.model");
 
-async function verifyRole(req, res, next) {
+async function addRole(req, res, next) {
   try {
     // check if user is admin
     const user = await User.findOne({ _id: req.user });
@@ -19,4 +19,4 @@ async function verifyRole(req, res, next) {
   }
 }
 
-module.exports = verifyRole;
+module.exports = addRole;

@@ -1,6 +1,6 @@
 const express = require("express");
 const verifyToken = require("../middleware/verifyToken");
-const verifyRole = require("../middleware/verifyRole");
+const addRole = require("../middleware/addRole");
 const teacherRoute = require("../middleware/teacherRoute");
 
 const {
@@ -15,7 +15,7 @@ const {
 
 const router = express.Router();
 
-router.use(verifyToken, verifyRole, teacherRoute);
+router.use(verifyToken, addRole, teacherRoute);
 router.route("/").get(getAllStudents);
 router.route("/:id/xp").patch(gainXP);
 router.route("/:id/undo").patch(undo);

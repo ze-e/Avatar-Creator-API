@@ -1,6 +1,6 @@
 const express = require("express");
 const verifyToken = require("../middleware/verifyToken");
-const verifyRole = require("../middleware/verifyRole");
+const addRole = require("../middleware/addRole");
 
 const {
   getAllUsers,
@@ -18,7 +18,7 @@ const {
 
 const router = express.Router();
 
-router.use(verifyToken, verifyRole);
+router.use(verifyToken, addRole);
 router.route("/users").get(getAllUsers);
 router.route("/login").post(loginUser);
 router.route("/register").post(createUser);
