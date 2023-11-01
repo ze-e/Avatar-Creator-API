@@ -4,9 +4,7 @@ const { gainLevel } = require("../utils/levels");
 const { seedLevelTable } = require("../data/levels.sample.data");
 
 // GET all students objects
-exports.getAllStudents = async (userId, role) => {
-  if (role !== 'teacher') throw new Error(`Only teachers have students`);
-
+exports.getAllStudents = async (userId) => {
   try {
     let users;
     const currentUser = await User.findById(userId);
@@ -22,10 +20,8 @@ exports.getAllStudents = async (userId, role) => {
 };
 
 // increase xp and gold by amount
-exports.gainXP = async (userId, amount, role, teacherId) => {
+exports.gainXP = async (userId, amount, teacherId) => {
   try {
-    if (role !== 'teacher') throw new Error(`Only teachers have access to this route`);
-
     let teacher = await User.findOne({ _id: teacherId });
 
     if (!teacher) {
@@ -65,10 +61,8 @@ exports.gainXP = async (userId, amount, role, teacherId) => {
 };
 
 // remove student
-exports.removeStudent = async (userId, role, teacherId) => {
+exports.removeStudent = async (userId, teacherId) => {
   try {
-    if (role !== "teacher")
-      throw new Error(`Only teachers have access to this route`);
 
     const teacher = await User.findOne({ _id: teacherId });
 
@@ -99,9 +93,8 @@ exports.removeStudent = async (userId, role, teacherId) => {
 };
 
 // add student
-exports.addStudent = async (userId, role, teacherId) => {
+exports.addStudent = async (userId, teacherId) => {
   try {
-    if (role !== 'teacher') throw new Error(`Only teachers have access to this route`);
 
     const teacher = await User.findOne({ _id: teacherId });
 
@@ -132,9 +125,8 @@ exports.addStudent = async (userId, role, teacherId) => {
   }
 };
 
-exports.undo = async (userId, key, role, teacherId) => {
+exports.undo = async (userId, key, teacherId) => {
   try {
-    if (!role) throw new Error(`Only teachers have access to this route`);
 
     let teacher = await User.findOne({ _id: teacherId });
 
@@ -173,10 +165,8 @@ exports.undo = async (userId, key, role, teacherId) => {
 };
 
 // add badge to student
-exports.addBadge = async (userId, badgeId, role, teacherId) => {
+exports.addBadge = async (userId, badgeId, teacherId) => {
   try {
-    if (role !== 'teacher') throw new Error(`Only teachers have access to this route`);
-
     let teacher = await User.findOne({ _id: teacherId });
 
     if (!teacher) {
@@ -203,10 +193,8 @@ exports.addBadge = async (userId, badgeId, role, teacherId) => {
 };
 
 // remove badge from student
-exports.removeBadge = async (userId, badgeId, role, teacherId) => {
+exports.removeBadge = async (userId, badgeId, teacherId) => {
   try {
-    if (role !== 'teacher') throw new Error(`Only teachers have access to this route`);
-
     let teacher = await User.findOne({ _id: teacherId });
 
     if (!teacher) {
