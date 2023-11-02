@@ -137,9 +137,9 @@ exports.unequipItem = async (req, res) => {
 //reset password
 exports.forgotPassword = async (req, res) => {
   try {
-    await userService.forgotPassword(req.body.email);
+    const message = await userService.forgotPassword(req.body.email);
     res.status(200).json({
-      message: "Created password reset",
+      message
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -149,7 +149,7 @@ exports.forgotPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
   try {
     const message = await userService.resetPassword(
-      req.params.userId,
+      req.params.id,
       req.params.token,
       req.body.password
     );

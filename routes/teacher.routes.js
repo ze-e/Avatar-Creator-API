@@ -11,7 +11,7 @@ const {
   addStudent,
   addBadge,
   removeBadge,
-  forgotPassword
+  forgotStudentPassword,
 } = require("../controllers/teacher.controller");
 
 const router = express.Router();
@@ -27,6 +27,6 @@ router.route("/:id/addBadge").patch(addBadge);
 router.route("/:id/removeBadge").patch(removeBadge);
 
 // reset student password
-router.route("/:id/forgotPassword").post(forgotPassword);
+router.route("/:id/forgotPassword").post(forgotStudentPassword);
 
 module.exports = router;

@@ -203,16 +203,16 @@ exports.forgotPassword = async (email) => {
     if (!user) {
       throw new Error(`User not found`);
     }
+
     const secret = user.admin.password + process.env.SECRETKEY;
+    const payload = {email: user.email}
 
     //create password link. Valid for 30 minutes
-    const token = jwt.sign(user.email, secret, process.env.SECRETKEY, {
-      expiresIn: "30m",
-    });
+    const token = jwt.sign(payload, secret, {expiresIn: "30m"});
 
     //send email
-    console.log("created reset token for " + email + " : " + token);
-    return "Sent reset email";
+    console.log("created reset token for " + user.email + " : " + token);
+    return "Check your email for a password reset link";
   } catch (error) {
     throw new Error(`Error while sending email: ${error}`);
   }
@@ -225,7 +225,8 @@ exports.resetPassword = async (userId, token, password) => {
   }
 
   try {
-    const secret = process.env.SECRETKEY + user.admin.password;
+    const secret =
+    user.admin.password + process.env.SECRETKEY;
     jwt.verify(token, secret);
     user.admin.password = await bcrypt.hash(password, 10);
     await user.save();
