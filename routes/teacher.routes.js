@@ -10,7 +10,8 @@ const {
   removeStudent,
   addStudent,
   addBadge,
-  removeBadge
+  removeBadge,
+  forgotPassword
 } = require("../controllers/teacher.controller");
 
 const router = express.Router();
@@ -24,5 +25,8 @@ router.route("/:id/remove").patch(removeStudent);
 
 router.route("/:id/addBadge").patch(addBadge);
 router.route("/:id/removeBadge").patch(removeBadge);
+
+// reset student password
+router.route("/:id/forgotPassword").post(forgotPassword);
 
 module.exports = router;

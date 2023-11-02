@@ -14,6 +14,8 @@ const {
   removeFromInventory,
   equipItem,
   unequipItem,
+  forgotPassword,
+  resetPassword
 } = require("../controllers/users.controller");
 
 const router = express.Router();
@@ -27,7 +29,8 @@ router
   .route("/user/:id")
   .get(getUserById)
   .delete(deleteUser)
-  .patch(updateUser);
+  .patch(updateUser)
+  .patch()
 
 // gear and inventory
 router
@@ -36,5 +39,9 @@ router
   .delete(removeFromInventory);
 router.route("/user/:id/gear/equip").patch(equipItem);
 router.route("/user/:id/gear/unequip").patch(unequipItem);
+
+// reset password
+router.route("/user/forgotPassword").post(forgotPassword);
+router.route("/user/:id/resetPassword/:token").patch(resetPassword);
 
 module.exports = router;

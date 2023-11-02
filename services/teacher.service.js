@@ -218,3 +218,27 @@ exports.removeBadge = async (userId, badgeId, teacherId) => {
     throw new Error(`Error while removing badge: ${error}`);
   }
 };
+
+// reset student password
+exports.studentForgotPassword = async (student) => {
+  try {
+    let user;
+    user = await User.findOne({ "admin.email": student });
+    if (!user) {
+      user = await User.findOne({ "admin.userName": student });
+      if (!user) throw new Error(`User not found`);
+    }
+    const secret = user.admin.password + process.env.SECRETKEY;
+
+    //create password link. Valid for 30 minutes
+    const token = jwt.sign(user.email, secret, process.env.SECRETKEY, {
+      expiresIn: "30m",
+    });
+
+    //send email
+    console.log("created reset token for " + email + " : " + token);
+    return "Sent reset email";
+  } catch (error) {
+    throw new Error(`Error while sending email: ${error}`);
+  }
+};

@@ -133,3 +133,32 @@ exports.unequipItem = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+//reset password
+exports.forgotPassword = async (req, res) => {
+  try {
+    await userService.forgotPassword(req.body.email);
+    res.status(200).json({
+      message: "Created password reset",
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const message = await userService.resetPassword(
+      req.params.userId,
+      req.params.token,
+      req.body.password
+    );
+    res
+      .status(200)
+      .json({
+        message
+      });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

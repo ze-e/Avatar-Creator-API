@@ -195,3 +195,43 @@ exports.deleteUser  = async (userId) =>{
     throw new Error(`Error while deleting user`);
   }
 }
+
+// PATCH method to update user password
+exports.forgotPassword = async (email) => {
+  try {
+    const user = await User.findOne({ "admin.email": email });
+    if (!user) {
+      throw new Error(`User not found`);
+    }
+    const secret = user.admin.password + process.env.SECRETKEY;
+
+    //create password link. Valid for 30 minutes
+    const token = jwt.sign(user.email, secret, process.env.SECRETKEY, {
+      expiresIn: "30m",
+    });
+
+    //send email
+    console.log("created reset token for " + email + " : " + token);
+    return "Sent reset email";
+  } catch (error) {
+    throw new Error(`Error while sending email: ${error}`);
+  }
+};
+
+exports.resetPassword = async (userId, token, password) => {
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    throw new Error(`User not found`);
+  }
+
+  try {
+    const secret = process.env.SECRETKEY + user.admin.password;
+    jwt.verify(token, secret);
+    user.admin.password = await bcrypt.hash(password, 10);
+    await user.save();
+    return "Password updated successfully!";
+  } catch (error) {
+    throw new Error(`Error while updating user information: ${error}`);
+  }
+}
+
