@@ -7,8 +7,7 @@ const { sanitizeUser } = require("../utils/user");
 exports.getAllUsers = async (role) => {
   try {
     const users = await User.find();
-    if (role === "user") users.map((u) => sanitizeUser(u)); // delete admin fields
-    return users;
+    return users.map((u) => sanitizeUser(u, role !== 'user')); // delete admin fields
   } catch (error) {
     throw new Error(`Error while retrieving users: ${error}`);
   }
@@ -30,7 +29,7 @@ exports.getCurrentUser = async (userId) => {
 exports.getUserById = async (userId, role) => {
   try {
     const user = await User.findOne({ _id: userId });
-    return role === "user" ? sanitizeUser(user) : user;
+    return sanitizeUser(user, role !== "user");
   } catch (error) {
     throw new Error(`Error while retrieving user: ${error}`);
   }
@@ -104,7 +103,7 @@ exports.updateUser = async (userId, newVals, role) => {
     user.data = data;
 
     await user.save();
-    return sanitizeUser(user);
+    return sanitizeUser(user, role !== "user");
   } catch (error) {
     throw new Error(`Error while updating user information: ${error}`);
   }
@@ -128,7 +127,7 @@ exports.addToInventory = async (userId, item) => {
     user.data.inventory = [...inventory, item.id];
 
     await user.save();
-    return sanitizeUser(user);
+    return sanitizeUser(user, true);
   } catch (error) {
     throw new Error(`Could not buy item: ${error}`);
   }
@@ -142,11 +141,11 @@ exports.removeFromInventory = async (userId, item) => {
       throw new Error(`User not found`);
     }
     if (!item.id) throw new Error(`Invalid item`);
-    // TODO: this will not work for duplicate items
+    // NOTE: this will not work for duplicate items
     user.data.inventory = user.data.inventory.filter(i => i !== item.id);
 
     await user.save();
-    return sanitizeUser(user);
+    return sanitizeUser(user, true);
   } catch (error) {
     throw new Error(`Could not remove item: ${error}`);
   }
@@ -164,7 +163,7 @@ exports.equipItem = async (userId, item) => {
     user.data.gear[item.location] = item.id;
 
     await user.save();
-    return sanitizeUser(user);
+    return sanitizeUser(user, true);
   } catch (error) {
     throw new Error(`Could not equip item: ${error}`);
   }
@@ -182,7 +181,7 @@ exports.unequipItem = async (userId, item) => {
     user.data.gear[item.location] = "";
 
     await user.save();
-    return sanitizeUser(user);
+    return sanitizeUser(user, true);
   } catch (error) {
     throw new Error(`Could not unequip item: ${error}`);
   }

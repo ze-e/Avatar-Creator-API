@@ -1,7 +1,8 @@
 //hides data we do not want to return in our response
-exports.sanitizeUser = (user) => {
+exports.sanitizeUser = (user, hasPermission = false) => {
   const userData = { ...user };
-  delete userData._doc.admin;
+  if (!hasPermission) delete userData._doc.admin;
+  else delete userData._doc.admin.password;
   return userData._doc;
 };
 
