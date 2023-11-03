@@ -149,7 +149,6 @@ exports.forgotPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
   try {
     const message = await userService.resetPassword(
-      req.params.id,
       req.params.token,
       req.body.password
     );

@@ -42,6 +42,6 @@ router.route("/user/:id/gear/unequip").patch(unequipItem);
 
 // reset password
 router.route("/user/forgotPassword").post(forgotPassword);
-router.route("/user/:id/resetPassword/:token").patch(resetPassword);
+router.route("/user/resetPassword/:token").patch(resetPassword);
 
 module.exports = router;

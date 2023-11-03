@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model");
 const { sanitizeUser } = require("../utils/user");
+const { sendMail } = require("../utils/nodemailer");
 
 // GET all user objects
 exports.getAllUsers = async (role) => {
@@ -204,30 +205,34 @@ exports.forgotPassword = async (email) => {
       throw new Error(`User not found`);
     }
 
-    const secret = user.admin.password + process.env.SECRETKEY;
-    const payload = {email: user.email}
+    const secret = process.env.SECRETKEY;
+    const payload = { email: user.admin.email };
 
     //create password link. Valid for 30 minutes
-    const token = jwt.sign(payload, secret, {expiresIn: "30m"});
+    const token = jwt.sign(payload, secret, { expiresIn: "30m" });
 
     //send email
-    console.log("created reset token for " + user.email + " : " + token);
-    return "Check your email for a password reset link";
+    console.log("created reset token for " + user.admin.email + " : " + token);
+    await sendMail({
+      to: user.admin.email,
+      subject: "CodeQuest - Reset Password",
+      text: `Copy this token to reset your email: ${token}`,
+    });
+    return "Check your email for a password reset token";
   } catch (error) {
     throw new Error(`Error while sending email: ${error}`);
   }
 };
 
-exports.resetPassword = async (userId, token, password) => {
-  const user = await User.findOne({ _id: userId });
-  if (!user) {
-    throw new Error(`User not found`);
-  }
-
+exports.resetPassword = async ( token, password) => {
   try {
-    const secret =
-    user.admin.password + process.env.SECRETKEY;
-    jwt.verify(token, secret);
+    const secret = process.env.SECRETKEY;
+    const userId = await jwt.verify(token, secret);
+
+    const user = await User.findOne({ _id: userId });
+    if (!user) {
+      throw new Error(`User not found`);
+    }
     user.admin.password = await bcrypt.hash(password, 10);
     await user.save();
     return "Password updated successfully!";
