@@ -233,7 +233,8 @@ exports.resetPassword = async (token, password) => {
     if (!user) {
       throw new Error(`User not found`);
     }
-    user.admin.password = await bcrypt.hash(password, 10);
+    if (await bcrypt.compare(password, user.admin.password)) throw new Error(`New password cannot match old password!`);
+    else user.admin.password = newpass;
     await user.save();
     return "Password updated successfully!";
   } catch (error) {
