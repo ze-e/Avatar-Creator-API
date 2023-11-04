@@ -44,4 +44,4 @@ router.route("/user/:id/gear/unequip").patch(unequipItem);
 router.route("/user/forgotPassword").post(forgotPassword);
 router.route("/user/resetPassword/:token").post(resetPassword);
 
-module.exports = router;
+module.exports = router;AnimationEvent
