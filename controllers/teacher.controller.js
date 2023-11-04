@@ -94,14 +94,3 @@ exports.removeBadge = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-exports.forgotStudentPassword = async (req, res) => {
-  try {
-    await userService.forgotStudentPassword(req.body.student);
-    res.status(200).json({
-      message: "Created password reset for student",
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
