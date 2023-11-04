@@ -12,13 +12,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-exports.sendMail = async ({ to, subject, text }) => {
+exports.sendMail = async ({ to, subject, text, html }) => {
   // Send an email with the token link
   const mailOptions = {
     from: process.env.NODEMAILER_MAIL,
     to,
     subject,
     text,
+    html : html ? html : text
   };
   await transporter.sendMail(mailOptions);
 };

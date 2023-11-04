@@ -217,6 +217,7 @@ exports.forgotPassword = async (email) => {
       to: user.admin.email,
       subject: "CodeQuest - Reset Password",
       text: `Copy this token to reset your email: ${token}`,
+      html: `<h1>Copy this token to reset your email:</h1><br/><code>${token}</code>`,
     });
     return "Check your email for a password reset token";
   } catch (error) {
@@ -224,12 +225,11 @@ exports.forgotPassword = async (email) => {
   }
 };
 
-exports.resetPassword = async ( token, password) => {
+exports.resetPassword = async (token, password) => {
   try {
     const secret = process.env.SECRETKEY;
-    const userId = await jwt.verify(token, secret);
-
-    const user = await User.findOne({ _id: userId });
+    const decryptedToken = await jwt.verify(token, secret);
+    const user = await User.findOne({ "admin.email": decryptedToken.email });
     if (!user) {
       throw new Error(`User not found`);
     }
