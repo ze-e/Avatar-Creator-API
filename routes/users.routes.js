@@ -40,7 +40,7 @@ router.route("/user/:id/gear/equip").patch(equipItem);
 router.route("/user/:id/gear/unequip").patch(unequipItem);
 
 // reset password
-router.route("/user/forgotPassword").patch(forgotPassword);
-router.route("/user/resetPassword/:token").patch(resetPassword);
+router.route("/forgotPassword").post(forgotPassword);
+router.route("/resetPassword/:token").post(resetPassword);
 
 module.exports = router;
