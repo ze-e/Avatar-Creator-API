@@ -30,7 +30,6 @@ router
   .get(getUserById)
   .delete(deleteUser)
   .patch(updateUser)
-  .patch()
 
 // gear and inventory
 router
@@ -41,7 +40,7 @@ router.route("/user/:id/gear/equip").patch(equipItem);
 router.route("/user/:id/gear/unequip").patch(unequipItem);
 
 // reset password
-router.route("/user/forgotPassword").post(forgotPassword);
-router.route("/user/resetPassword/:token").post(resetPassword);
+router.route("/user/forgotPassword").patch(forgotPassword);
+router.route("/user/resetPassword/:token").patch(resetPassword);
 
 module.exports = router;
