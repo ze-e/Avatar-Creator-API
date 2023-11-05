@@ -1,13 +1,12 @@
 const userRoutes = require("./routes/users.routes");
 const adminRoutes = require("./routes/admin.routes");
 const teacherRoutes = require("./routes/teacher.routes");
+const badgeRoutes = require("./routes/badge.routes");
 const ping = require("./routes/ping.routes");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-
-const updateExistingUsers = require("./migrations/teacherStudentData");
 
 /* DATABASE */
 
@@ -58,6 +57,7 @@ app.use(cors());
 
 app.use("/", userRoutes);
 app.use("/students", teacherRoutes);
+app.use("/badge", teacherRoutes);
 app.use("/admin", adminRoutes);
 app.use("/ping", ping);
 

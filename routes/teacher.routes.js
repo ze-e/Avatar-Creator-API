@@ -11,7 +11,6 @@ const {
   addStudent,
   addBadge,
   removeBadge,
-  forgotStudentPassword,
 } = require("../controllers/teacher.controller");
 
 const router = express.Router();
