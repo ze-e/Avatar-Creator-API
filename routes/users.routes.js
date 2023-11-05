@@ -20,6 +20,13 @@ const {
 
 const router = express.Router();
 
+
+
+// reset password
+router.route("/forgotPassword").post(forgotPassword);
+router.route("/resetPassword/:token").post(resetPassword);
+
+// user routes
 router.use(verifyToken, addRole);
 router.route("/users").get(getAllUsers);
 router.route("/login").post(loginUser);
@@ -38,9 +45,5 @@ router
   .delete(removeFromInventory);
 router.route("/user/:id/gear/equip").patch(equipItem);
 router.route("/user/:id/gear/unequip").patch(unequipItem);
-
-// reset password
-router.route("/forgotPassword").post(forgotPassword);
-router.route("/resetPassword/:token").post(resetPassword);
 
 module.exports = router;
