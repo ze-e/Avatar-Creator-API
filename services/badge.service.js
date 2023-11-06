@@ -26,3 +26,6 @@ exports.createBadge = (data, image, teacherId) => {
     throw new Error(`Error while uploading badge: ${error}`);
   }
 }
+
+exports.deleteBadge = (id) => {
+}

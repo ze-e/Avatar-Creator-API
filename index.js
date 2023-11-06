@@ -6,6 +6,7 @@ const ping = require("./routes/ping.routes");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+
 require("dotenv").config();
 
 /* DATABASE */
@@ -57,7 +58,7 @@ app.use(cors());
 
 app.use("/", userRoutes);
 app.use("/students", teacherRoutes);
-app.use("/badge", teacherRoutes);
+app.use("/badge", badgeRoutes);
 app.use("/admin", adminRoutes);
 app.use("/ping", ping);
 
