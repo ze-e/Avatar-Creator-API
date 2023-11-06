@@ -2,6 +2,7 @@ const express = require("express");
 const verifyToken = require("../middleware/verifyToken");
 const addRole = require("../middleware/addRole");
 const teacherRoute = require("../middleware/teacherRoute");
+const upload = require("../middleware/upload");
 
 const {
   createBadge,
@@ -13,6 +14,6 @@ router.use(verifyToken, addRole, teacherRoute);
 
 // router.route("/").get(getBadges);
 // router.route("/:id").get(getBadge).patch(editBadge).delete(deleteBadge);
-router.route("/create").post(createBadge);
+router.post("/create", upload.single("file"), createBadge)
 
 module.exports = router;
