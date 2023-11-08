@@ -1,31 +1,37 @@
-const Badge = require("../models/Badge.model");
-const fs = require("fs");
+// const Badge = require("../models/Badge.model");
+import Badge from ("../models/Badge.model");
+// const fileType = require('file-type');
+// const { fileTypeFromFile } = require("file-type");
+import { fileTypeFromFile } from "file-type";
 
-exports.createBadge = (data, image, teacherId) => {
+exports.createBadge = async ({data, teacherId}) => {
+
   try {
-  const { name, description } = data;
+    // Check the file type
+    const allowedFileTypes = ['jpg', 'jpeg', 'png', 'gif'];
+    const fileBuffer = Buffer.from(data.file, 'base64');
+
+    // Determine the file type based on its content
+    const detectedType = await fileTypeFromFile(fileBuffer);
+    if (detectedType && !allowedFileTypes.includes(detectedType.ext)) {
+      throw new Error("File must be of type: " + allowedFileTypes.join(", "));
+    }
+
+    // If file is of correct type, save file
     const badgeData = {
-      name,
-      description,
+      name: data.name,
+      description: data.description,
       image: {
-        data: fs.readFileSync(image.path), // Read the image file as binary data
-        contentType: image.mimetype, // Set the content type from the uploaded file
+        image: data.file,
+        contentType: detectedType.ext,
       },
-      teacherId
+      teacherId,
     };
 
-    Badge.create(badgeData, (error, badge) => {
-      if (error) {
-        console.error(error);
-        throw new Error(`Error while uploading badge: ${error}`);
-      }
-      return `Badge uploaded successfully. ${badge}`
-    });
+    const badge = await Badge.create(badgeData);
+    return badge;
   }
   catch (error) {
     throw new Error(`Error while uploading badge: ${error}`);
   }
-}
-
-exports.deleteBadge = (id) => {
 }

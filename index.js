@@ -11,7 +11,7 @@ require("dotenv").config();
 
 /* DATABASE */
 
-const isLocal = process.env.ISLOCAL || false;
+const isLocal = process.env.ISLOCAL === 'true' || false;
 
 function connectToDB() {
   console.log("connecting to database...");
