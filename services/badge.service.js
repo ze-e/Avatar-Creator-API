@@ -1,19 +1,15 @@
-// const Badge = require("../models/Badge.model");
-import Badge from ("../models/Badge.model");
-// const fileType = require('file-type');
-// const { fileTypeFromFile } = require("file-type");
-import { fileTypeFromFile } from "file-type";
+const Badge = require("../models/Badge.model");
+const { getImageMime } = require("base64-image-mime");
 
 exports.createBadge = async ({data, teacherId}) => {
 
   try {
     // Check the file type
-    const allowedFileTypes = ['jpg', 'jpeg', 'png', 'gif'];
-    const fileBuffer = Buffer.from(data.file, 'base64');
+    const allowedFileTypes = ["image/png", "image/jpeg", "image/gif"];
 
     // Determine the file type based on its content
-    const detectedType = await fileTypeFromFile(fileBuffer);
-    if (detectedType && !allowedFileTypes.includes(detectedType.ext)) {
+    const fileType = getImageMime(data.file);
+    if (detectedType && !allowedFileTypes.includes(fileType)) {
       throw new Error("File must be of type: " + allowedFileTypes.join(", "));
     }
 
@@ -23,7 +19,7 @@ exports.createBadge = async ({data, teacherId}) => {
       description: data.description,
       image: {
         image: data.file,
-        contentType: detectedType.ext,
+        contentType: fileType,
       },
       teacherId,
     };
