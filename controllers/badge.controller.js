@@ -9,7 +9,7 @@ exports.createBadge = async (req, res) => {
   try {
     const badge = await badgeService.createBadge({
       data: req.body,
-      teacherId: req.user._id,
+      teacherId: req.user,
     });
     res
       .status(200)

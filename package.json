@@ -9,7 +9,6 @@
   },
   "author": "Z Rex Rodriguez",
   "dependencies": {
-    "base64-image-mime": "^1.0.2",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",

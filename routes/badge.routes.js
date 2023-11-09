@@ -7,7 +7,7 @@ const { createBadge } = require("../controllers/badge.controller");
 
 const router = express.Router();
 
-// router.use(verifyToken, addRole, teacherRoute);
+router.use(verifyToken, addRole, teacherRoute);
 
 // router.route("/").get(getBadges);
 // router.route("/:id").patch(editBadge).delete(deleteBadge);
