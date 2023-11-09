@@ -41,8 +41,8 @@ exports.loginUser = async ({userName, password}) => {
   try {
     let user = null;
 
-    user = await User.findOne({ "admin.userName": userName })
-    if (!user) user = await User.findOne({ "admin.email": userName });
+    user = await User.findOne({ "admin.userName": userName.toLower() });
+    if (!user) user = await User.findOne({ "admin.email": userName.toLower() });
     if (!user) throw new Error("Invalid userName or password");
 
     if (await bcrypt.compare(password, user.admin.password)) {
@@ -59,8 +59,8 @@ exports.createUser = async (userName, email, password) => {
   try {
     const userData = {
       admin: {
-        userName,
-        email,
+        userName: userName.toLower(),
+        email: email.toLower(),
         password: await bcrypt.hash(password, 10),
       },
       data: {
@@ -200,13 +200,13 @@ exports.deleteUser  = async (userId) =>{
 // PATCH method to update user password
 exports.forgotPassword = async (email) => {
   try {
-    const user = await User.findOne({ "admin.email": email });
+    const user = await User.findOne({ "admin.email": email.toLower() });
     if (!user) {
       throw new Error(`User not found`);
     }
 
     const secret = process.env.SECRETKEY;
-    const payload = { email: user.admin.email };
+    const payload = { email: user.admin.email.toLower() };
 
     //create password link. Valid for 30 minutes
     const token = jwt.sign(payload, secret, { expiresIn: "30m" });

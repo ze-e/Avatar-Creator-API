@@ -3,14 +3,22 @@ const verifyToken = require("../middleware/verifyToken");
 const addRole = require("../middleware/addRole");
 const teacherRoute = require("../middleware/teacherRoute");
 
-const { createBadge } = require("../controllers/badge.controller");
+const { createBadge, getBadges, getBadgeById, getBadgesByIds, deleteBadge } = require("../controllers/badge.controller");
 
 const router = express.Router();
 
-router.use(verifyToken, addRole, teacherRoute);
+// no token needed
+router.route("/:id").get(getBadgeById);
 
-// router.route("/").get(getBadges);
-// router.route("/:id").patch(editBadge).delete(deleteBadge);
+// token needed
+router.use(verifyToken, addRole);
+router.route("/badges").get(getBadgesByIds);
+
+// teacher role needed
+
+router.use(teacherRoute);
+router.route("/").get(getBadges);
+router.route("/:id").delete(deleteBadge);
 router.post("/create", createBadge)
 
 module.exports = router;

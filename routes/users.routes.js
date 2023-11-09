@@ -20,8 +20,6 @@ const {
 
 const router = express.Router();
 
-
-
 // reset password
 router.route("/forgotPassword").post(forgotPassword);
 router.route("/resetPassword/:token").post(resetPassword);
@@ -35,7 +33,6 @@ router.route("/user").get(getCurrentUser);
 router
   .route("/user/:id")
   .get(getUserById)
-  .delete(deleteUser)
   .patch(updateUser)
 
 // gear and inventory
