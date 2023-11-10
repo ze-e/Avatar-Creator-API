@@ -11,13 +11,19 @@ const badgeSchema = new Schema({
     required: true,
   },
   image: {
-    data: Buffer, // Binary data for the image
-    contentType: String, // MIME type of the image
+    data: {
+      type: String,
+      required: true
+    }, // Binary data for the image
+    contentType: {
+      type: String,
+      required: true
+    }, // MIME type of the image
   },
   teacherId: {
     type: String,
     required: true,
-  }
+  },
 });
 
 module.exports = mongoose.model("Badge", badgeSchema);

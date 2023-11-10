@@ -11,13 +11,12 @@ exports.createBadge = async ({data, teacherId}) => {
       throw new Error("File must be of type: " + allowedFileTypes.join(", "));
     }
 
-
     // If file is of correct type, save file
     const badgeData = {
       name: data.name,
       description: data.description,
       image: {
-        image: data.file.fileData,
+        data: data.file.fileData,
         contentType: data.file.fileType,
       },
       teacherId,
